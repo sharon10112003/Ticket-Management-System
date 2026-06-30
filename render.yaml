@@ -1,5 +1,5 @@
-services: 
-  # Backend Express server
+services:
+  # Backend Express Server
   - type: web
     name: tms-backend
     env: node
@@ -8,16 +8,14 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars:
-      - key: PORT
-        value: 5000
       - key: MONGODB_URI
-        sync: false # User must specify their MongoDB connection string
+        sync: false
       - key: JWT_SECRET
         generateValue: true
       - key: NODE_ENV
         value: production
 
-  # Frontend React (Vite) application
+  # Frontend React (Vite)
   - type: web
     name: tms-frontend
     env: static
