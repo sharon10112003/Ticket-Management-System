@@ -1,7 +1,14 @@
 import axios from 'axios';
 
+let baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+// If baseURL is just the host URL (e.g. from Render's blueprint), append /api
+if (baseURL && !baseURL.endsWith('/api') && !baseURL.endsWith('/api/')) {
+    baseURL = baseURL.endsWith('/') ? `${baseURL}api` : `${baseURL}/api`;
+}
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+    baseURL,
 });
 
 api.interceptors.request.use((config) => {
