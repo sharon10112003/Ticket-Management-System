@@ -14,7 +14,7 @@ services:
       - key: NODE_ENV
         value: production
 
-  - type: static_site
+  - type: static
     name: tms-frontend
     rootDir: frontend
     buildCommand: npm install && npm run build
@@ -25,7 +25,6 @@ services:
           type: web
           name: tms-backend
           envVarKey: RENDER_EXTERNAL_URL
-
     routes:
       - type: rewrite
         source: /*
