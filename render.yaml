@@ -17,17 +17,16 @@ services:
   - type: web
     name: tms-frontend
     runtime: static
-    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
-      - key: VITE_API_URL
-        fromService:
-          type: web
-          name: tms-backend
-          envVarKey: RENDER_EXTERNAL_URL
+    - key: VITE_API_URL
+      fromService:
+        type: web
+        name: tms-backend
+        envVarKey: RENDER_EXTERNAL_URL
     routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    - type: rewrite
+      source: /*
+      destination: /index.html 
