@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
     }
 };
 
-// Seeding SuperAdmin (Temporary helper for Week 1 requirement)
+// Seeding SuperAdmin — deletes and recreates to fix any password issues
 exports.seedSuperAdmin = async (req, res) => {
     try {
         let superAdminRole = await Role.findOne({ roleName: 'SuperAdmin' });
@@ -46,22 +46,20 @@ exports.seedSuperAdmin = async (req, res) => {
             await superAdminRole.save();
         }
 
-        const existingAdmin = await User.findOne({ email: 'admin@tms.com' });
-        if (existingAdmin) {
-            return res.status(200).json({ message: 'SuperAdmin already exists' });
-        }
+        // Delete existing admin so we can recreate with correct password hash
+        await User.deleteOne({ email: 'admin@tms.com' });
 
-        const hashedPassword = await bcrypt.hash('admin123', 10);
+        // Pass plain password — pre-save hook in User.js will hash it once
         const admin = new User({
             userName: 'Super Admin',
             phoneNumber: '1234567890',
             email: 'admin@tms.com',
-            password: hashedPassword,
+            password: 'admin123',
             role: superAdminRole._id
         });
 
         await admin.save();
-        res.status(201).json({ message: 'SuperAdmin seeded successfully' });
+        res.status(201).json({ message: 'SuperAdmin seeded successfully. Login with admin@tms.com / admin123' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
